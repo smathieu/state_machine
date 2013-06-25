@@ -108,6 +108,10 @@ class Vehicle < ModelBase
     event :repair do
       transition :stalled => :parked, :if => :auto_shop_busy?
     end
+
+    event :abort do
+      transition any => :aborted
+    end
   end
   
   state_machine :insurance_state, :initial => :inactive, :namespace => 'insurance' do
@@ -398,6 +402,10 @@ class VehicleUnsavedTest < Test::Unit::TestCase
   
   def test_should_not_allow_crash
     assert !@vehicle.crash
+  end
+
+  def test_should_allow_abort
+    assert !@vehicle.abort
   end
   
   def test_should_not_allow_repair
